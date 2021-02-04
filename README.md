@@ -1,7 +1,10 @@
 ## canying_community
 
 ### bug修改
-#### 1. 分页点击页码无法跳转 修改index.html即可
+
+#### 1. 引入的bootstrup和jQuery失效 -> 更换cdn
+
+#### 2. 分页点击页码无法跳转 -> 修改index.html即可
 ```java 
 <nav class="mt-5" th:if="${page.rows>0}" th:fragment="pagination">
 	<ul class="pagination justify-content-center">
@@ -23,6 +26,9 @@
 	</ul>
 </nav>
 ```
+#### 3. 添加拦截器后无法访问静态资源 -> 修改 WebMvcConfig.java 
+
+
 
 ### 版本信息
 * SpringBoot 2.1.6.RELEASE
