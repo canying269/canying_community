@@ -2,7 +2,7 @@
 
 ### bug修改
 
-#### 1. 引入的bootstrup和jQuery失效 -> (1)更换cdn (2)下载到本地 引入本地文件
+#### 1. 引入的bootstrup和jQuery失效 -> (1)更换cdn 或者(2)下载到本地 引入本地文件
 (1). 更换cdn 
 * bootstrap.min.css
 ~~~html
