@@ -17,7 +17,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.slim.js" integrity="sha256-fNXJFIlca05BIO2Y5zh1xrShK3ME+/lYZ0j+ChxX2DA=" crossorigin="anonymous"></script> 
 ~~~
 
-#### 2. 分页点击页码无法跳转 -> 修改index.html即可
+#### 2. 建议所有dao包下所有Mapper加上 @Mapper @Repository 这两个注解
+
+#### 3. 分页点击页码无法跳转 -> 修改index.html即可
 ```java 
 <nav class="mt-5" th:if="${page.rows>0}" th:fragment="pagination">
     <ul class="pagination justify-content-center">
@@ -39,7 +41,7 @@
     </ul>
 </nav>
 ```
-#### 3. 添加拦截器后无法访问静态资源 -> 修改 WebMvcConfig.java 
+#### 4. 添加拦截器后无法访问静态资源 -> 修改 WebMvcConfig.java 
 ~~~java
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
