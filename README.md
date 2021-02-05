@@ -79,6 +79,36 @@ public class WebMvcConfig implements WebMvcConfigurer {
 </select>
 ~~~
 
+#### 6. MessageController中，getNoticeList方法内 当message为空时 messageVo存入任何值 thymeleaf取不到对应的值
+~~~java
+//查询评论通知
+	......
+        Message message = messageService.findLastNotice(user.getId(), TOPIC_COMMENT);
+        Map<String, Object> messageVo = new HashMap<>();
+        if (message != null) {
+            messageVo.put("message", message);
+	......
+~~~
+两种修改思路
+* 1. if后添加else thymeleaf需要的变量手动设置空值 
+* 2. messageVo在if内部new
+使用第二种修改,如下
+~~~java
+//查询关注通知
+	...
+        message = messageService.findLastNotice(user.getId(), TOPIC_FOLLOW);
+        if (message != null) {
+            Map<String, Object> messageVo = new HashMap<>();
+            messageVo.put("message", message);
+	...
+	model.addAttribute("followNotice", messageVo);
+~~~
+评论、点赞同样的方式修改
+再修改thymeleaf 
+每一类通知的li标签添加判断，当xxxNotice不为空时就显示 如点赞类通知：th:if="${likeNotice!=null}"
+
+
+
 
 ### 版本信息
 * SpringBoot 2.1.6.RELEASE
