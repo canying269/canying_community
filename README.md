@@ -68,7 +68,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 }
 ~~~
 
-#### user-mapper.xml 内 selectByName 若有两人相同用户名，其中一人激活，一人未激活 查询时会报错
+#### 5. user-mapper.xml 内 selectByName 若有两人相同用户名，其中一人激活，一人未激活 查询时会报错
 * 解决方法：增加sql语句，限定查询已激活的用户
 ~~~xml
 <select id="selectByName" resultType="User">
