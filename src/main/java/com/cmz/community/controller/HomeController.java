@@ -5,7 +5,6 @@ import com.cmz.community.entity.Page;
 import com.cmz.community.entity.User;
 import com.cmz.community.service.DiscussPostService;
 import com.cmz.community.service.LikeService;
-import com.cmz.community.service.MessageService;
 import com.cmz.community.service.UserService;
 import com.cmz.community.util.CommunityConstant;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +31,7 @@ public class HomeController implements CommunityConstant {
     private LikeService likeService;
 
     @RequestMapping(path = "/index", method = RequestMethod.GET)
-    public String getIndexPage(Model model,Page page){
+    public String getIndexPage(Model model, Page page) {
 
         //userId为0时 mapper.xml里查出全部数据
         //总行数
@@ -42,27 +41,32 @@ public class HomeController implements CommunityConstant {
         //查询当前页帖子，放入list中
         List<DiscussPost> list = discussPostService.findDiscussPosts(0, page.getOffset(), page.getLimit());
         List<Map<String, Object>> discussPosts = new ArrayList<>();
-        if(list != null){
-            for(DiscussPost post : list){
+        if (list != null) {
+            for (DiscussPost post : list) {
                 Map<String, Object> map = new HashMap<>();
-                map.put("post",post);
+                map.put("post", post);
                 User user = userService.findUserById(post.getUserId());
-                map.put("user",user);
+                map.put("user", user);
 
                 long likeCount = likeService.findEntityLikeCount(ENTITY_TYPE_POST, post.getId());
-                map.put("like",likeCount);
+                map.put("like", likeCount);
 
                 discussPosts.add(map);
             }
         }
-        model.addAttribute("discussPosts",discussPosts);
+        model.addAttribute("discussPosts", discussPosts);
 
         return "/index";
     }
 
 
     @GetMapping("/error")
-    public String getErrorPage(){
+    public String getErrorPage() {
         return "/error/500";
+    }
+
+    @GetMapping("/denied")
+    public String getDeniedPage() {
+        return "/error/404";
     }
 }

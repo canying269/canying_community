@@ -12,14 +12,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.GrantedAuthoritiesContainer;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -228,5 +227,31 @@ public class UserService implements CommunityConstant {
     private void clearCache(int userId) {
         String userKey = RedisKeyUtil.getUserKey(userId);
         redisTemplate.delete(userKey);
+    }
+
+    //根据用户获取权限 方便调用
+    //什么时候获得权限？把token存入context？-> 登录成功产生一个ticket 用户每次访问服务器，服务器验证ticket(过期，正确？) ->
+    // 拦截器判断登录是否有效(loginTicketInterceptor)，登录有效 -> 有权限的用户 ->查询权限 存入context
+    public Collection<? extends GrantedAuthority> getAuthorites(int userId) {
+        User user = this.findUserById(userId);
+
+        List<GrantedAuthority> list = new ArrayList<>();
+
+        list.add(new GrantedAuthority() {
+            //判断type 返回权限
+            @Override
+            public String getAuthority() {
+                switch (user.getType()){
+                    case 1:
+                        return AUTHORITY_ADMIN;
+                    case 2:
+                        return AUTHORITY_MODERATOR;
+                    default:
+                        return AUTHORITY_USER;
+                }
+            }
+        });
+
+        return list;
     }
 }

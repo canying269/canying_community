@@ -13,8 +13,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Autowired
     private LoginTicketInterceptor loginTicketInterceptor;
 
-    @Autowired
-    private LoginRequiredInterceptor loginRequiredInterceptor;
+    //被security替代  登录拦截由security接管 原未登录不能访问的页面
+//    @Autowired
+//    private LoginRequiredInterceptor loginRequiredInterceptor;
 
     @Autowired
     private MessageInterceptor messageInterceptor;
@@ -24,8 +25,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addInterceptor(loginTicketInterceptor)
                 .excludePathPatterns("/css/*","/js/*","/img/*");
 
-        registry.addInterceptor(loginRequiredInterceptor)
-                .excludePathPatterns("/css/*","/js/*","/img/*");
+//        registry.addInterceptor(loginRequiredInterceptor)
+//                .excludePathPatterns("/css/*","/js/*","/img/*");
 
         registry.addInterceptor(messageInterceptor)
                 .excludePathPatterns("/css/*","/js/*","/img/*");

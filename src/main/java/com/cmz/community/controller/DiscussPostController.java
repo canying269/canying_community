@@ -98,8 +98,8 @@ public class DiscussPostController implements CommunityConstant {
         //评论的显示列表 评论vo列表
         List<Map<String, Object>> commentVoList = new ArrayList<>();
 
-        if (commentList != null){
-            for (Comment comment : commentList){
+        if (commentList != null) {
+            for (Comment comment : commentList) {
                 //单个回帖
                 Map<String, Object> commentVo = new HashMap<>();
                 //单个回帖内容
@@ -122,8 +122,8 @@ public class DiscussPostController implements CommunityConstant {
                 );
                 //回复的vo列表
                 List<Map<String, Object>> replyVoList = new ArrayList<>();
-                if(replyList != null){
-                    for (Comment reply : replyList){
+                if (replyList != null) {
+                    for (Comment reply : replyList) {
                         //单个回复
                         Map<String, Object> replyVo = new HashMap<>();
                         //回复
@@ -151,16 +151,72 @@ public class DiscussPostController implements CommunityConstant {
 
                 //回帖的评论数
                 int replyCount = commentService.findCommentCount(ENTITY_TYPE_CONTENT, comment.getId());
-                commentVo.put("replyCount", replyCount  );
+                commentVo.put("replyCount", replyCount);
 
                 commentVoList.add(commentVo);
             }
         }
-        model.addAttribute("comments",commentVoList);
+        model.addAttribute("comments", commentVoList);
 
 
-            return "/site/discuss-detail";
+        return "/site/discuss-detail";
     }
 
+    //置顶
+    @PostMapping("/top")
+    @ResponseBody
+    public String setTop(int id) {
+        discussPostService.updateType(id, 1);
+
+        //同步到es
+        //触发发帖事件 向es中存贴子
+        Event event = new Event()
+                .setTopic(TOPIC_PUBLISH)
+                .setUserId(hostHolder.getUser().getId())
+                .setEntityType(ENTITY_TYPE_POST)
+                .setEntityId(id);
+        eventProducer.fireEvent(event);
+
+        return CommunityUtil.getJSONString(0);
+
+    }
+
+    //加精
+    @PostMapping("/wonderful")
+    @ResponseBody
+    public String setWonderful(int id) {
+        discussPostService.updateStatus(id, 1);
+
+        //同步到es
+        //触发发帖事件 向es中存贴子
+        Event event = new Event()
+                .setTopic(TOPIC_PUBLISH)
+                .setUserId(hostHolder.getUser().getId())
+                .setEntityType(ENTITY_TYPE_POST)
+                .setEntityId(id);
+        eventProducer.fireEvent(event);
+
+        return CommunityUtil.getJSONString(0);
+
+    }
+
+    //删除
+    @PostMapping("/delete")
+    @ResponseBody
+    public String setDelete(int id) {
+        discussPostService.updateStatus(id, 2);
+
+        //同步到es
+        //触发删帖事件
+        Event event = new Event()
+                .setTopic(TOPIC_DELETE)
+                .setUserId(hostHolder.getUser().getId())
+                .setEntityType(ENTITY_TYPE_POST)
+                .setEntityId(id);
+        eventProducer.fireEvent(event);
+
+        return CommunityUtil.getJSONString(0);
+
+    }
 
 }

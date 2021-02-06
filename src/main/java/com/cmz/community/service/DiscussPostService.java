@@ -19,16 +19,16 @@ public class DiscussPostService {
     @Autowired
     private SensitiveFilter sensitiveFilter;
 
-    public List<DiscussPost> findDiscussPosts(int userId, int offset, int limit){
+    public List<DiscussPost> findDiscussPosts(int userId, int offset, int limit) {
         return discussPostMapper.selectDiscussPosts(userId, offset, limit);
     }
 
-    public int findDiscussPostRows(int userId){
+    public int findDiscussPostRows(int userId) {
         return discussPostMapper.selectDiscussPostRows(userId);
     }
 
-    public int addDiscussPost(DiscussPost post){
-        if(post == null){
+    public int addDiscussPost(DiscussPost post) {
+        if (post == null) {
             throw new IllegalArgumentException("参数不能为空");
         }
 
@@ -42,12 +42,20 @@ public class DiscussPostService {
         return discussPostMapper.insertDiscussPost(post);
     }
 
-    public DiscussPost findDiscussPostById(int id){
+    public DiscussPost findDiscussPostById(int id) {
 
         return discussPostMapper.selectDiscussPostById(id);
     }
 
-    public int updateCommentCount(int id, int commentCount){
+    public int updateCommentCount(int id, int commentCount) {
         return discussPostMapper.updateCommentCount(id, commentCount);
+    }
+
+    public int updateType(int id, int type) {
+        return discussPostMapper.updateType(id, type);
+    }
+
+    public int updateStatus(int id, int status) {
+        return discussPostMapper.updateStatus(id, status);
     }
 }
