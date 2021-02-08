@@ -3,19 +3,20 @@
 ### bug修改
 
 #### 1. 引入的bootstrup和jQuery失效 -> (1)更换cdn 或者(2)下载到本地 引入本地文件
-(1). 更换cdn 
+(1). 更换cdn ！！！！！！！jQuery.js放在Bootstrup.js上面
 * bootstrap.min.css
 ~~~html
 <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
-~~~
-* bootstrap.js
-~~~html
-<script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.js"></script>
 ~~~
 * jquery.js
 ~~~html
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
 ~~~
+* bootstrap.js
+~~~html
+<script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.js"></script>
+~~~
+
 
 #### 2. 建议所有dao包下所有Mapper加上 @Mapper @Repository 这两个注解
 
