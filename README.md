@@ -3,7 +3,7 @@
 ### bug修改
 
 #### 1. 引入的bootstrup和jQuery失效 -> (1)更换cdn 或者(2)下载到本地 引入本地文件
-(1). 更换cdn ！！！！！！！jQuery.js放在Bootstrup.js上面
+(1). 更换cdn ！！！！！！！jQuery.js放在bootstrap.js上面
 * bootstrap.min.css
 ~~~html
 <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
