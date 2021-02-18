@@ -1,6 +1,5 @@
 package com.cmz.community;
 
-import com.cmz.CommunityApplication;
 import com.cmz.community.dao.DiscussPostMapper;
 import com.cmz.community.dao.LoginTicketMapper;
 import com.cmz.community.dao.MessageMapper;
@@ -9,6 +8,7 @@ import com.cmz.community.entity.DiscussPost;
 import com.cmz.community.entity.LoginTicket;
 import com.cmz.community.entity.Message;
 import com.cmz.community.entity.User;
+import com.cmz.community.service.DiscussPostService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +35,9 @@ public class MapperTests {
 
     @Autowired
     private MessageMapper messageMapper;
+
+    @Autowired
+    private DiscussPostService discussPostService;
 
 
 
@@ -85,7 +88,7 @@ public class MapperTests {
 
     @Test
     public void testSelectPosts(){
-        List<DiscussPost> discussPosts = discussPostMapper.selectDiscussPosts(0, 0, 10);
+        List<DiscussPost> discussPosts = discussPostMapper.selectDiscussPosts(0, 0, 100000, 0);
         for (DiscussPost dis : discussPosts){
             System.out.println(dis);
         }

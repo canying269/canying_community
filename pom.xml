@@ -13,9 +13,42 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>community</name>
 	<description>cmz community</description>
+	<packaging>war</packaging>
 
 
 	<dependencies>
+		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-actuator -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.jetbrains/annotations -->
+		<dependency>
+			<groupId>org.jetbrains</groupId>
+			<artifactId>annotations</artifactId>
+			<version>13.0</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/com.github.ben-manes.caffeine/caffeine -->
+		<dependency>
+			<groupId>com.github.ben-manes.caffeine</groupId>
+			<artifactId>caffeine</artifactId>
+			<version>2.7.0</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-quartz</artifactId>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/com.qiniu/qiniu-java-sdk -->
+		<dependency>
+			<groupId>com.qiniu</groupId>
+			<artifactId>qiniu-java-sdk</artifactId>
+			<version>7.4.0</version>
+		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.thymeleaf.extras/thymeleaf-extras-springsecurity5 -->
 		<dependency>
@@ -127,20 +160,20 @@
 	</dependencies>
 
 	<build>
+		<finalName>ROOT</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<version>2.4.0</version>
 			</plugin>
 		</plugins>
 
-		<resources>
-			<!-- mapper.xml文件在resources目录下-->
-			<resource>
-				<directory>src/main/resources</directory>
-			</resource>
-		</resources>
+<!--		<resources>-->
+<!--			&lt;!&ndash; mapper.xml文件在resources目录下&ndash;&gt;-->
+<!--			<resource>-->
+<!--				<directory>src/main/resources</directory>-->
+<!--			</resource>-->
+<!--		</resources>-->
 	</build>
 
 </project>

@@ -10,7 +10,7 @@ import java.util.List;
 @Mapper
 @Repository
 public interface DiscussPostMapper {
-    List<DiscussPost> selectDiscussPosts(int userId, int offset, int limit);
+    List<DiscussPost> selectDiscussPosts(int userId, int offset, int limit, int orderMode);
 
     //@Param 别名 需要动态拼接SQL条件<if>，且只有一个参数，必须加别名
     int selectDiscussPostRows(@Param("userId") int userId);
@@ -24,4 +24,6 @@ public interface DiscussPostMapper {
     int updateType(int id,int type);
 
     int updateStatus(int id,int status);
+
+    int updateScore(int id, double score);
 }

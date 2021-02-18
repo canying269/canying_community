@@ -1,6 +1,5 @@
 package com.cmz.community;
 
-import com.cmz.CommunityApplication;
 import com.cmz.community.util.SensitiveFilter;
 import org.junit.Test;
 import org.junit.runner.RunWith;

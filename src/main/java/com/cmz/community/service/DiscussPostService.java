@@ -4,14 +4,27 @@ import com.cmz.community.dao.CommentMapper;
 import com.cmz.community.dao.DiscussPostMapper;
 import com.cmz.community.entity.DiscussPost;
 import com.cmz.community.util.SensitiveFilter;
+import com.github.benmanes.caffeine.cache.CacheLoader;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.LoadingCache;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.units.qual.A;
+import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.HtmlUtils;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class DiscussPostService {
+
+    private static final Logger logger = LoggerFactory.getLogger(DiscussPostService.class);
 
     @Autowired
     private DiscussPostMapper discussPostMapper;
@@ -19,11 +32,82 @@ public class DiscussPostService {
     @Autowired
     private SensitiveFilter sensitiveFilter;
 
-    public List<DiscussPost> findDiscussPosts(int userId, int offset, int limit) {
-        return discussPostMapper.selectDiscussPosts(userId, offset, limit);
+    @Value("${caffeine.posts.max-size}")
+    private int maxSize;
+
+    @Value("${caffeine.posts.expire-seconds}")
+    private int expireSeconds;
+
+    //Caffeine核心接口：Cache, LoadingCache同步缓存，AsyncLoadingCache异步缓存支持并发取值
+
+    //帖子列表的缓存
+    private LoadingCache<String, List<DiscussPost>> postListCache;
+
+    //帖子数量的缓存
+    private LoadingCache<Integer, Integer> postRowsCache;
+
+    //初始化缓存
+    @PostConstruct
+    public void init() {
+
+        postListCache = Caffeine.newBuilder()
+                .maximumSize(maxSize)
+                .expireAfterWrite(expireSeconds, TimeUnit.SECONDS)
+                .build(new CacheLoader<String, List<DiscussPost>>() {
+                    @org.jetbrains.annotations.Nullable
+                    @Override
+                    public List<DiscussPost> load(@NonNull String key) throws Exception {
+                        //load 查询数据库方法
+                        if (key == null || key.length() == 0) {
+                            throw new IllegalArgumentException("参数错误！");
+                        }
+
+                        String[] params = key.split(":");
+                        if (params == null || params.length != 2) {
+                            throw new IllegalArgumentException("参数错误！");
+                        }
+
+                        int offset = Integer.valueOf(params[0]);
+                        int limit = Integer.valueOf(params[1]);
+
+                        //二级缓存：redis -> mysql
+
+                        logger.debug("load post rows from DB.");
+                        return discussPostMapper.selectDiscussPosts(0, offset, limit, 1);
+                    }
+                });
+
+        postRowsCache = Caffeine.newBuilder()
+                .maximumSize(maxSize)
+                .expireAfterWrite(expireSeconds,TimeUnit.SECONDS)
+                .build(new CacheLoader<Integer, Integer>() {
+                    @Nullable
+                    @Override
+                    public Integer load(@NonNull Integer key) throws Exception {
+                        logger.debug("load post rows from DB.");
+                        return discussPostMapper.selectDiscussPostRows(key);
+                    }
+                });
+
     }
 
+    //哪里调用？ 1首页 2热门 3用户查看自己帖子 只缓存热门（当首页时 userID=0，orderMode=1）
+    public List<DiscussPost> findDiscussPosts(int userId, int offset, int limit, int orderMode) {
+        if (userId == 0 && orderMode == 1) {
+            return postListCache.get(offset + ":" + limit);
+        }
+
+        logger.debug("load post list from DB.");
+        return discussPostMapper.selectDiscussPosts(userId, offset, limit, orderMode);
+    }
+
+    //可缓存 当传入userID时不缓存，不传入时缓存
     public int findDiscussPostRows(int userId) {
+        if (userId == 0) {
+            return postRowsCache.get(userId);
+        }
+
+        logger.debug("load post rows from DB.");
         return discussPostMapper.selectDiscussPostRows(userId);
     }
 
@@ -58,4 +142,10 @@ public class DiscussPostService {
     public int updateStatus(int id, int status) {
         return discussPostMapper.updateStatus(id, status);
     }
+
+    public int updateScore(int id, double score) {
+        return discussPostMapper.updateScore(id, score);
+    }
+
+
 }
