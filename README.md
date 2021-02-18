@@ -1,5 +1,7 @@
 ## canying_community
 
+### 测试地址：<http://106.13.80.98>
+
 ### bug修改
 
 #### 1. 引入的bootstrup和jQuery失效 -> (1)更换cdn 或者(2)下载到本地 引入本地文件
