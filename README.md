@@ -4,7 +4,7 @@
 
 ### bug修改
 
-#### 1. 引入的bootstrup和jQuery失效 -> (1)更换cdn 或者(2)下载到本地 引入本地文件
+#### 1. 引入的bootstrap和jQuery失效 -> (1)更换cdn 或者(2)下载到本地 引入本地文件
 (1). 更换cdn ！！！！！！！jQuery.js放在bootstrap.js上面
 * bootstrap.min.css
 ~~~html
@@ -110,7 +110,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
 再修改thymeleaf 
 每一类通知的li标签添加判断，当xxxNotice不为空时就显示 如点赞类通知：th:if="${likeNotice!=null}"
 
-
+#### 7. 在与某个好友私信详情中，发私信，会发两条？？？
+定位到 messageMapper.insertMessage(message) 执行后会向数据库插入两条一模一样的数据
+->可能异步请求发送了两次请求
+->修改letter.js 内 $("#sendBtn").click(send_letter); ->$("#sendBtn").off().click(send_letter);
 
 
 ### 版本信息
