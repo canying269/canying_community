@@ -111,10 +111,11 @@ public class WebMvcConfig implements WebMvcConfigurer {
 每一类通知的li标签添加判断，当xxxNotice不为空时就显示 如点赞类通知：th:if="${likeNotice!=null}"
 
 #### 7. 在与某个好友私信详情中，发私信，会发两条？？？
-定位到 messageMapper.insertMessage(message) 执行后会向数据库插入两条一模一样的数据
-->可能异步请求发送了两次请求
-->修改letter.js 内 $("#sendBtn").click(send_letter); ->$("#sendBtn").off().click(send_letter);
-
+定位到 messageMapper.insertMessage(message) 执行后会向数据库插入两条一模一样的数据<br/>
+->可能异步请求发送了两次请求<br/>
+->修改letter.js 内 <br/>
+$("#sendBtn").click(send_letter); ->$("#sendBtn").off().click(send_letter); <br/>
+完活
 
 ### 版本信息
 * SpringBoot 2.1.6.RELEASE
