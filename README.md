@@ -114,7 +114,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
 定位到 messageMapper.insertMessage(message) 执行后会向数据库插入两条一模一样的数据<br/>
 ->可能异步请求发送了两次请求<br/>
 ->修改letter.js 内 <br/>
-$("#sendBtn").click(send_letter); ->$("#sendBtn").off().click(send_letter); <br/>
+$("#sendBtn").click(send_letter); <br/>
+变为<br/>
+$("#sendBtn").off().click(send_letter); <br/>
 完活
 
 ### 版本信息
