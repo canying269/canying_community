@@ -1,6 +1,8 @@
-## canying_community
+## canying_community 
 
 ### 测试地址：<http://106.13.80.98>
+
+### 完整项目请合并分支complete_community (包含数据统计、热帖及定时更新最热、头像上传至七牛云)
 
 ### bug修改
 
